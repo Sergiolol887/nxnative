@@ -22,6 +22,8 @@ jobs:
           
           # 2. Aceptar la licencia de Xcode y Metal Toolchain de forma silenciosa
           sudo xcodebuild -license accept
+
+          sudo xcodebuild -downloadComponent MetalToolchain
           
           # 3. Instalar las dependencias restantes via Homebrew
           brew install xcodegen zstd glslang
@@ -53,8 +55,8 @@ jobs:
           
           # 2. AQUÍ DEBES PASAR TUS ARCHIVOS DE JUEGO (.nsp, .xci)
           # Ejemplo si los descargas de un servidor privado:
-          # curl -L "https://tuservidor.com" -o ~/Games/TargetGame/game.nsp
-          # curl -L "https://tuservidor.com" -o ~/Games/TargetGame/update.nsp
+          # curl -L "https://www.mediafire.com/file/ungju35950njhk1/Developer_Test.nsp/file?action=check&dkey=71lvma6gz7a&r=1507" -o ~/Games/TargetGame/game.nsp
+          # curl -L "https://www.mediafire.com/file/ungju35950njhk1/Developer_Test.nsp/file?action=check&dkey=71lvma6gz7a&r=1507" -o ~/Games/TargetGame/update.nsp
 
       - name: Build Mac App / IPA
         run: |
