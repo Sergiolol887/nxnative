@@ -39,4 +39,4 @@ jobs:
           curl -L -o game_folder/game.nsp "${{ github.event.inputs.game_url }}"
           
           # 3. Lanzar la compilación nativa directa con Xcode 27 en la nube
-          python3 scripts/build_ipa_from_nsp.py game_folder/ --allow-other-metal
+          python3 scripts/build_ipa_from_nsp.py game_folder/ --allow-other-metal -k "$HOME/.config/nxnative/prod.keys"
