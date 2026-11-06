@@ -51,7 +51,7 @@ jobs:
           mkdir -p ~/Games/TargetGame
           
           # 1. Guardar tus prod.keys desde el secreto de GitHub
-          echo "$PROD_KEYS" > ~/keys/prod.keys
+          echo "${{ secrets.PROD_KEYS }}" > ~/keys/prod.keys
           
           # 2. AQUÍ DEBES PASAR TUS ARCHIVOS DE JUEGO (.nsp, .xci)
           # Ejemplo si los descargas de un servidor privado:
