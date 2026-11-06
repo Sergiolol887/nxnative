@@ -30,13 +30,16 @@ jobs:
           mkdir -p "$HOME/.config/nxnative"
           echo "${{ secrets.PROD_KEYS }}" > "$HOME/.config/nxnative/prod.keys"
 
-      - name: Download and Build Game
+      - name: Download and Patch Code
         run: |
+          # 1. Descargar el archivo limpio del juego desde tu enlace
           curl -L -o game.nsp "${{ github.event.inputs.game_url }}"
+          
+          # 2. Forzar la extracción y generación inicial del proyecto de Xcode
+          python3 scripts/build_ipa_from_nsp.py game.nsp --allow-other-metal || true
+          
+          # 3. PARCHE NUCLEAR: Erradicar el Scaler moderno en todo el entorno generado
+          find . -type f \( -name "*.m" -o -name "*.h" -o -name "*.mm" -o -name "*.py" \) -exec sed -i '' -E 's/.*(colorContentOffsetX|colorContentOffsetY|MTL4FXTemporalScaler|MTL4FX).*/\/\/ Deshabilitado para Xcode 26.6/g' {} +
+          
+          # 4. Lanzar la compilación definitiva con los archivos ya capados en local
           python3 scripts/build_ipa_from_nsp.py game.nsp --allow-other-metal
-
-      - name: Upload Finished IPA
-        uses: actions/upload-artifact@v4
-        with:
-          name: DmIOS-Game-IPA
-          path: ./*_build/ipa/*.ipa
