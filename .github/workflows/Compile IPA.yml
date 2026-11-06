@@ -1,0 +1,63 @@
+name: Compile Game with nxnative
+
+on:
+  workflow_dispatch: # Te permite activar la compilación manualmente desde la pestaña Actions
+
+jobs:
+  build-macos:
+    runs-on: macos-15 # nxnative requiere Xcode moderno y herramientas Metal recientes
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Clone nxnative
+        run: |
+          git clone https://github.com/seedds/nxnative.git
+          cd nxnative
+
+      - name: Install macOS Dependencies
+        run: |
+          # Instalar la Toolchain de Metal obligatoria para nxnative
+          sudo xcodebuild -downloadComponent MetalToolchain
+          
+          # Instalar herramientas via Homebrew
+          brew install xcodegen zstd glslang
+          brew install --cask dotnet-sdk
+
+      - name: Setup Python Environment
+        run: |
+          cd nxnative
+          python3 -m pip install lz4 "capstone>=5,<6" fonttools nsz zbic
+          # Parche oficial de nxnative para evitar problemas de compatibilidad con LZ4
+          PYLZ4_USE_SYSTEM_LZ4=0 python3 -m pip install --no-binary lz4 lz4
+
+      - name: Decrypt or Download Game Files & Keys
+        env:
+          PROD_KEYS_SECRET: ${{ secrets.PROD_KEYS }} # Configurado en los Secretos de tu GitHub
+        run: |
+          cd nxnative
+          mkdir -p ~/keys
+          mkdir -p ~/Games/TargetGame
+          
+          # 1. Guardar tus prod.keys desde el secreto de GitHub
+          echo "$PROD_KEYS" > ~/keys/prod.keys
+          
+          # 2. AQUÍ DEBES PASAR TUS ARCHIVOS DE JUEGO (.nsp, .xci)
+          # Ejemplo si los descargas de un servidor privado:
+          # curl -L "https://tuservidor.com" -o ~/Games/TargetGame/game.nsp
+          # curl -L "https://tuservidor.com" -o ~/Games/TargetGame/update.nsp
+
+      - name: Build Mac App / IPA
+        run: |
+          cd nxnative
+          # Para generar una App de macOS (.app):
+          python3 scripts/build_ipa_from_nsp.py ~/Games/TargetGame -k ~/keys/prod.keys
+          
+          # NOTA: Si lo quieres para iPhone/iPad (IPA), remueve el parámetro '--platform mac-app'
+
+      - name: Upload Compiled Binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: Native-Mac-Game
+          path: ~/Games/TargetGame/*_build/run/*.app # Ajusta la ruta según la salida de nxnative
