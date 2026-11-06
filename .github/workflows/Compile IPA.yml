@@ -18,8 +18,14 @@ jobs:
 
       - name: Install macOS Dependencies
         run: |
-          # Instalar la Toolchain de Metal obligatoria para nxnative
-          sudo xcodebuild -downloadComponent MetalToolchain
+          sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+          
+          # 2. Aceptar la licencia de Xcode y Metal Toolchain de forma silenciosa
+          sudo xcodebuild -license accept
+          
+          # 3. Instalar las dependencias restantes via Homebrew
+          brew install xcodegen zstd glslang
+          brew install --cask dotnet-sdk
           
           # Instalar herramientas via Homebrew
           brew install xcodegen zstd glslang
