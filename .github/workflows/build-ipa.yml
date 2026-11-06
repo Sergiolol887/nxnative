@@ -30,19 +30,13 @@ jobs:
           mkdir -p "$HOME/.config/nxnative"
           echo "${{ secrets.PROD_KEYS }}" > "$HOME/.config/nxnative/prod.keys"
 
-      - name: Download, Patch and Structure Game Folder
+      - name: Download and Build Game Nativelly
         run: |
-          # 1. Crear la carpeta específica para el juego dentro del servidor
+          # 1. Crear la carpeta estructurada que pide el motor
           mkdir -p game_folder
           
-          # 2. Descargar el archivo .nsp directamente dentro de esa nueva carpeta
+          # 2. Descargar el juego de MediaFire directo a su directorio
           curl -L -o game_folder/game.nsp "${{ github.event.inputs.game_url }}"
           
-          # 3. Forzar la generación inicial del proyecto leyendo la carpeta estructurada
-          python3 scripts/build_ipa_from_nsp.py game_folder/ --allow-other-metal || true
-          
-          # 4. PARCHE NUCLEAR: Limpiar el Scaler moderno de Xcode 27 en los archivos generados
-          find . -type f \( -name "*.m" -o -name "*.h" -o -name "*.mm" -o -name "*.py" \) -exec sed -i '' -E 's/.*(colorContentOffsetX|colorContentOffsetY|MTL4FXTemporalScaler|MTL4FX).*/\/\/ Deshabilitado para Xcode 26.6/g' {} +
-          
-          # 5. Lanzar la compilación definitiva apuntando al directorio del juego
+          # 3. Lanzar la compilación nativa directa con Xcode 27 en la nube
           python3 scripts/build_ipa_from_nsp.py game_folder/ --allow-other-metal
