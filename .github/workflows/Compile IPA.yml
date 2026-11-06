@@ -55,7 +55,7 @@ jobs:
           
           # 2. AQUÍ DEBES PASAR TUS ARCHIVOS DE JUEGO (.nsp, .xci)
           # Ejemplo si los descargas de un servidor privado:
-          # curl -L "https://download856.mediafire.com/okr09qzx7rfg4v5_XW8cB_dwznqTq_IgmFTZXtxlfleIJ6DDam8EbadfEeAjlgSLuS8nzuVu7UliCTVEvWgItduFOswMVXvMPREBzZss4EPe2jpwzAVu6rd_QvsJm4D7VHFgttesaDeu2p8d_uQIgWVp6GSgzp8hXN4GjfsvEK-rjFI/ungju35950njhk1/Developer+Test.nsp"
+          # curl -L "https://download856.mediafire.com/okr09qzx7rfg4v5_XW8cB_dwznqTq_IgmFTZXtxlfleIJ6DDam8EbadfEeAjlgSLuS8nzuVu7UliCTVEvWgItduFOswMVXvMPREBzZss4EPe2jpwzAVu6rd_QvsJm4D7VHFgttesaDeu2p8d_uQIgWVp6GSgzp8hXN4GjfsvEK-rjFI/ungju35950njhk1/Developer+Test.nsp"p"
           # curl -L "https://download856.mediafire.com/okr09qzx7rfg4v5_XW8cB_dwznqTq_IgmFTZXtxlfleIJ6DDam8EbadfEeAjlgSLuS8nzuVu7UliCTVEvWgItduFOswMVXvMPREBzZss4EPe2jpwzAVu6rd_QvsJm4D7VHFgttesaDeu2p8d_uQIgWVp6GSgzp8hXN4GjfsvEK-rjFI/ungju35950njhk1/Developer+Test.nsp"
 
       - name: Build Mac App / IPA
