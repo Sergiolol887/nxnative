@@ -23,7 +23,7 @@ jobs:
           # 2. Aceptar la licencia de Xcode y Metal Toolchain de forma silenciosa
           sudo xcodebuild -license accept
 
-          sudo xcodebuild -downloadComponent MetalToolchain
+          # sudo xcodebuild -downloadComponent MetalToolchain
           
           # 3. Instalar las dependencias restantes via Homebrew
           brew install xcodegen zstd glslang
