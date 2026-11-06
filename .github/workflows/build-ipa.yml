@@ -1,0 +1,42 @@
+name: Build iOS IPA From NSP
+
+on:
+  workflow_dispatch:
+    inputs:
+      game_url:
+        description: 'URL de descarga directa del juego (.nsp)'
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          pip3 install lz4 "capstone>=5,<6" fonttools
+          brew install dotnet-sdk
+
+      - name: Setup Keys
+        run: |
+          mkdir -p "$HOME/.config/nxnative"
+          echo "${{ secrets.PROD_KEYS }}" > "$HOME/.config/nxnative/prod.keys"
+
+      - name: Download and Build Game
+        run: |
+          curl -L -o game.nsp "${{ github.event.inputs.game_url }}"
+          python3 scripts/build_ipa_from_nsp.py game.nsp --allow-other-metal
+
+      - name: Upload Finished IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: DmIOS-Game-IPA
+          path: ./*_build/ipa/*.ipa
