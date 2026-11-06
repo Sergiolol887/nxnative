@@ -34,10 +34,12 @@ jobs:
       - name: Setup Python Environment
         run: |
           cd nxnative
-          python3 -m pip install lz4 "capstone>=5,<6" fonttools nsz zbic
+          # Añadido --break-system-packages para permitir la instalación en el entorno global de GitHub Actions
+          python3 -m pip install lz4 "capstone>=5,<6" fonttools nsz zbic --break-system-packages
+          
           # Parche oficial de nxnative para evitar problemas de compatibilidad con LZ4
-          PYLZ4_USE_SYSTEM_LZ4=0 python3 -m pip install --no-binary lz4 lz4
-
+          PYLZ4_USE_SYSTEM_LZ4=0 python3 -m pip install --no-binary lz4 lz4 --break-system-packages
+          
       - name: Decrypt or Download Game Files & Keys
         env:
           PROD_KEYS_SECRET: ${{ secrets.PROD_KEYS }} # Configurado en los Secretos de tu GitHub
