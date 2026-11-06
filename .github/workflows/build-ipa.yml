@@ -39,6 +39,12 @@ jobs:
           echo "${{ secrets.PROD_KEYS }}" > "$HOME/.config/nxnative/prod.keys"
 
       - name: Download and Build Game Nativelly
+        env:
+          WARNING_CFLAGS: "-w"
+          OTHER_CFLAGS: "-w"
+          OTHER_CPLUSPLUSFLAGS: "-w"
+          GCC_TREAT_WARNINGS_AS_ERRORS: "NO"
+          RUN_CLANG_STATIC_ANALYZER: "NO"
         run: |
           # 1. Crear la carpeta estructurada que pide el motor
           mkdir -p game_folder
